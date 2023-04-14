@@ -3,6 +3,7 @@
     <v-card-title>Área de desenho</v-card-title>
     <v-card-text>
       <canvas ref="drawingCanvas" width="800" height="400"></canvas>
+      <v-btn color="secondary" @click="downloadCanvas">Download</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -27,8 +28,18 @@ export default defineComponent({
       canvas.dispose();
     });
 
+    function downloadCanvas() {
+      if (drawingCanvas.value) {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL({ format: "png" });
+        link.download = "drawing.png";
+        link.click();
+      }
+    }
+
     return {
       drawingCanvas,
+      downloadCanvas,
     };
   },
 });

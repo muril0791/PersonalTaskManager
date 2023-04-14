@@ -2,15 +2,15 @@
   <v-card>
     <v-card-title>Timer</v-card-title>
     <v-card-text>
-      <div>{{ time }}</div>
-      <v-btn @click="startTimer">Iniciar</v-btn>
-      <v-btn @click="stopTimer">Parar</v-btn>
+      <div class="timer-display">{{ formattedTime }}</div>
+      <v-btn color="primary" @click="startTimer">Iniciar</v-btn>
+      <v-btn color="error" @click="stopTimer">Parar</v-btn>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 
 const time = ref(0);
 const timer = ref<ReturnType<typeof setInterval> | null>(null);
@@ -30,11 +30,22 @@ function stopTimer() {
   }
 }
 
+function formatTime(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+}
+
+const formattedTime = computed(() => formatTime(time.value));
+
 export default defineComponent({
   name: "MyTimer",
   setup() {
     return {
-      time,
+      formattedTime,
       startTimer,
       stopTimer,
     };
@@ -44,3 +55,10 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.timer-display {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+</style>

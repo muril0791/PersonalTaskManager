@@ -1,18 +1,26 @@
 <template>
   <v-card>
-    <v-card-title>To-Do List</v-card-title>
-    <v-card-text>
+    <v-card-title>
+      ToDo List
+      <v-spacer></v-spacer>
       <v-text-field
         v-model="newTask"
-        @keyup.enter="addTask"
-        placeholder="Adicionar nova tarefa"
         label="Nova Tarefa"
+        @keyup.enter="addTask"
       ></v-text-field>
+    </v-card-title>
+    <v-card-text>
       <v-list>
-        <v-list-item v-for="(task, index) in tasks" :key="index">
-          <v-list-item-content>{{ task }}</v-list-item-content>
+        <v-list-item
+          v-for="(task, index) in tasks"
+          :key="index"
+          class="task-item"
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{ task.text }}</v-list-item-title>
+          </v-list-item-content>
           <v-list-item-action>
-            <v-btn text icon @click="removeTask(index)">
+            <v-btn icon @click="deleteTask(index)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -26,26 +34,34 @@
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  name: "MyToDo",
   setup() {
+    const tasks = ref<any[]>([]);
     const newTask = ref("");
-    const tasks = ref<string[]>([]);
 
     function addTask() {
-      tasks.value.push(newTask.value);
-      newTask.value = "";
+      if (newTask.value.trim()) {
+        tasks.value.push({ text: newTask.value.trim() });
+        newTask.value = "";
+      }
     }
 
-    function removeTask(index: number) {
+    function deleteTask(index: number) {
       tasks.value.splice(index, 1);
     }
 
     return {
-      newTask,
       tasks,
+      newTask,
       addTask,
-      removeTask,
+      deleteTask,
     };
   },
 });
 </script>
+<style scoped>
+.task-item {
+  background-color: #f5f5f5;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+</style>
