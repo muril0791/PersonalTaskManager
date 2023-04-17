@@ -1,5 +1,11 @@
 <template>
   <v-app>
+    <v-switch
+      label="Modo Escuro"
+      v-model="$vuetify.theme.dark"
+      color="white"
+      class="mr-5"
+    ></v-switch>
     <v-main>
       <h1>Sistema de Controle Pessoal</h1>
       <ToDoList />
@@ -15,16 +21,15 @@
 import { defineComponent } from "vue";
 import ToDoList from "./components/ToDoList.vue";
 import Timer from "./components/Timer.vue";
-// import Emails from "./components/Emails.vue";
-// import GoogleCalendar from "./components/GoogleCalendar.vue";
 import DrawingArea from "./components/DrawingArea.vue";
 
 export default defineComponent({
+  data: () => ({
+    darkMode: false,
+  }),
   components: {
     ToDoList,
     Timer,
-    // Emails,
-    // GoogleCalendar,
     DrawingArea,
   },
 });

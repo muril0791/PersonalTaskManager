@@ -1,29 +1,19 @@
 <template>
   <v-card>
-    <v-card-title>
-      ToDo List
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="newTask"
-        label="Nova Tarefa"
-        @keyup.enter="addTask"
-      ></v-text-field>
-    </v-card-title>
+    <v-card-title>ToDo List</v-card-title>
     <v-card-text>
+      <v-text-field label="Tarefa" v-model="newTask" @keyup.enter="addTask" />
       <v-list>
         <v-list-item
           v-for="(task, index) in tasks"
           :key="index"
-          class="task-item"
+          class="d-flex justify-space-between align-center"
         >
           <v-list-item-content>
-            <v-list-item-title>{{ task.text }}</v-list-item-title>
+            <v-checkbox v-model="task.completed" color="primary" />
+            {{ task.description }}
           </v-list-item-content>
-          <v-list-item-action>
-            <v-btn icon @click="deleteTask(index)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-list-item-action>
+          <v-btn color="error" @click="removeTask(index)">Remover</v-btn>
         </v-list-item>
       </v-list>
     </v-card-text>
@@ -33,35 +23,40 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
+interface Task {
+  description: string;
+  completed: boolean;
+}
+
+const newTask = ref("");
+const tasks = ref<Task[]>([]);
+
+function addTask() {
+  if (newTask.value.trim() !== "") {
+    tasks.value.push({ description: newTask.value, completed: false });
+    newTask.value = "";
+  }
+}
+
+function removeTask(index: number) {
+  tasks.value.splice(index, 1);
+}
+
 export default defineComponent({
   setup() {
-    const tasks = ref<any[]>([]);
-    const newTask = ref("");
-
-    function addTask() {
-      if (newTask.value.trim()) {
-        tasks.value.push({ text: newTask.value.trim() });
-        newTask.value = "";
-      }
-    }
-
-    function deleteTask(index: number) {
-      tasks.value.splice(index, 1);
-    }
-
     return {
-      tasks,
       newTask,
+      tasks,
       addTask,
-      deleteTask,
+      removeTask,
     };
   },
 });
 </script>
+
 <style scoped>
-.task-item {
-  background-color: #f5f5f5;
-  margin-bottom: 1rem;
-  border-radius: 5px;
+.v-list-item-content {
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -5,6 +5,7 @@
       <div class="timer-display">{{ formattedTime }}</div>
       <v-btn color="primary" @click="startTimer">Iniciar</v-btn>
       <v-btn color="error" @click="stopTimer">Parar</v-btn>
+      <v-btn color="warning" @click="resetTimer">Resetar</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -30,24 +31,29 @@ function stopTimer() {
   }
 }
 
-function formatTime(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-  return `${hours.toString().padStart(2, "0")}:${minutes
-    .toString()
-    .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+function resetTimer() {
+  stopTimer();
+  time.value = 0;
 }
 
-const formattedTime = computed(() => formatTime(time.value));
+const formattedTime = computed(() => {
+  const hours = Math.floor(time.value / 3600);
+  const minutes = Math.floor((time.value % 3600) / 60);
+  const seconds = time.value % 60;
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+});
 
 export default defineComponent({
   name: "MyTimer",
   setup() {
     return {
-      formattedTime,
+      time,
       startTimer,
       stopTimer,
+      resetTimer,
+      formattedTime,
     };
   },
   beforeUnmount() {
@@ -55,10 +61,12 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
 .timer-display {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  text-align: center;
 }
 </style>
