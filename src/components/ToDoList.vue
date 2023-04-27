@@ -105,30 +105,7 @@ export default defineComponent({
 
 <style scoped>
 .resizeable-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.completed-task {
-  text-decoration: line-through;
-}
-
-.vue-resize-handle {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  width: 16px;
-  height: 16px;
-  background: radial-gradient(
-    at 100% 50%,
-    rgba(0, 0, 0, 0.2),
-    rgba(0, 0, 0, 0.2) 70%,
-    transparent 72%,
-    transparent
-  );
-  cursor: ew-resize;
-  user-select: none;
-  touch-action: none;
-  transform: translateY(-50%);
+  resize: both;
+  overflow: auto;
 }
 </style>
